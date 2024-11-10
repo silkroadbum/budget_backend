@@ -8,6 +8,7 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { Repository } from 'typeorm';
+import { TransactionEnum } from 'src/types/types';
 
 @Injectable()
 export class TransactionService {
@@ -87,5 +88,15 @@ export class TransactionService {
     });
 
     return transactions;
+  }
+
+  async findAllByType(id: number, type: TransactionEnum) {
+    const transactions = await this.transactionRepository.find({
+      where: { user: { id }, type },
+    });
+
+    const total = transactions.reduce((acc, item) => acc + item.amount, 0);
+
+    return total;
   }
 }
