@@ -23,7 +23,7 @@ export class UserService {
       throw new BadRequestException('Этот пользователь уже существует.');
     }
 
-    const user = await this.userRepository.save({
+    const { password, ...user } = await this.userRepository.save({
       email: createUserDto.email,
       password: await argon2.hash(createUserDto.password),
     });
